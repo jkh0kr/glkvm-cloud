@@ -7,7 +7,13 @@
  * @Description: 设置相关类型声明
  */
 
-import { Languages, SelectOptions } from 'gl-web-main'
+import { SelectOptions } from 'gl-web-main'
+
+export enum Languages {
+    ZH = 'zh',
+    EN = 'en',
+    KO = 'ko',
+}
 
 /** 语言对应的label映射 */
 export const languageLabelMap = new Map<Languages, string>([

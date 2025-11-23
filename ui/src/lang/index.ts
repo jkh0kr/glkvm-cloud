@@ -11,7 +11,7 @@ import zh from './locales/zh.json'
 import en from './locales/en.json'
 import ko from './locales/ko.json'
 import useLanguage from '@/hooks/useLanguage'
-import { Languages } from 'gl-web-main'
+import { Languages } from '@/models/setting'
 
 const i18n = createI18n({
     legacy: false,
