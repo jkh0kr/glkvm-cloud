@@ -6,26 +6,6 @@ on:
     - 'v*'
 
 jobs:
-  docker:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-
-      - id: get-version
-        uses: battila7/get-version-action@v2
-
-      - uses: docker/login-action@v3
-        with:
-          username: jkhkr
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: |
-            jkhkr/rttys:${{ steps.get-version.outputs.version-without-v }}
-            jkhkr/rttys:latest
-
   build:
     runs-on: ubuntu-24.04
     steps:
@@ -58,6 +38,13 @@ jobs:
           COMPRESS=1 ./build.sh linux amd64
           COMPRESS=1 ./build.sh linux arm64
           COMPRESS=1 ./build.sh windows amd64
+          ./build.sh linux amd64
+
+      - name: Upload rttys binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: rttys-binary
+          path: rttys-${{ steps.get-version.outputs.version-without-v }}-linux-amd64/rttys
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
@@ -69,3 +56,32 @@ jobs:
             rttys-${{ steps.get-version.outputs.version-without-v }}-linux-arm64.tar.bz2
             rttys-${{ steps.get-version.outputs.version-without-v }}-windows-amd64.tar.bz2
           draft: true
+
+  docker:
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-version
+        uses: battila7/get-version-action@v2
+
+      - name: Download rttys binary
+        uses: actions/download-artifact@v4
+        with:
+          name: rttys-binary
+
+      - name: Make rttys executable
+        run: chmod +x rttys
+
+      - uses: docker/login-action@v3
+        with:
+          username: jkhkr
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: |
+            jkhkr/rttys:${{ steps.get-version.outputs.version-without-v }}
+            jkhkr/rttys:latest
