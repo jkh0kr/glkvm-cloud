@@ -40,11 +40,14 @@ jobs:
           COMPRESS=1 ./build.sh windows amd64
           ./build.sh linux amd64
 
+      - name: Prepare rttys binary for artifact
+        run: cp rttys-${{ steps.get-version.outputs.version-without-v }}-linux-amd64/rttys rttys
+
       - name: Upload rttys binary
         uses: actions/upload-artifact@v4
         with:
           name: rttys-binary
-          path: rttys-${{ steps.get-version.outputs.version-without-v }}-linux-amd64/rttys
+          path: rttys
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
