@@ -16,15 +16,15 @@ jobs:
 
       - uses: docker/login-action@v3
         with:
-          username: zhaojh329
+          username: jkhkr
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - uses: docker/build-push-action@v6
         with:
           push: true
           tags: |
-            zhaojh329/rttys:${{ steps.get-version.outputs.version-without-v }}
-            zhaojh329/rttys:latest
+            jkhkr/rttys:${{ steps.get-version.outputs.version-without-v }}
+            jkhkr/rttys:latest
 
   build:
     runs-on: ubuntu-24.04
