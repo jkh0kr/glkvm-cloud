@@ -8,13 +8,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    outputs:
+      rttys_version: ${{ steps.get-rttys-version.outputs.RttysVersion }}
     steps:
       - uses: actions/checkout@v4
 
       - id: get-version
         uses: battila7/get-version-action@v2
-        with:
-          strip-suffix: "_ko"
+        # Removed with: strip-suffix: "_ko"
+
+      - name: Get RttysVersion from main.go
+        id: get-rttys-version
+        run: echo "RttysVersion=$(grep 'const RttysVersion' main.go | cut -d'"' -f2)" >> $GITHUB_OUTPUT
 
       - uses: actions/setup-go@v5
         with:
@@ -43,7 +48,7 @@ jobs:
           ./build.sh linux amd64
 
       - name: Prepare rttys binary for artifact
-        run: cp rttys-${{ steps.get-version.outputs.version-without-v }}-linux-amd64/rttys rttys
+        run: cp rttys-${{ steps.get-rttys-version.outputs.RttysVersion }}-linux-amd64/rttys rttys
 
       - name: Upload rttys binary
         uses: actions/upload-artifact@v4
@@ -55,11 +60,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            rttys_${{ steps.get-version.outputs.version-without-v }}_amd64.deb
-            rttys_${{ steps.get-version.outputs.version-without-v }}_arm64.deb
-            rttys-${{ steps.get-version.outputs.version-without-v }}-linux-amd64.tar.bz2
-            rttys-${{ steps.get-version.outputs.version-without-v }}-linux-arm64.tar.bz2
-            rttys-${{ steps.get-version.outputs.version-without-v }}-windows-amd64.tar.bz2
+            rttys_${{ steps.get-rttys-version.outputs.RttysVersion }}_amd64.deb
+            rttys_${{ steps.get-rttys-version.outputs.RttysVersion }}_arm64.deb
+            rttys-${{ steps.get-rttys-version.outputs.RttysVersion }}-linux-amd64.tar.bz2
+            rttys-${{ steps.get-rttys-version.outputs.RttysVersion }}-linux-arm64.tar.bz2
+            rttys-${{ steps.get-rttys-version.outputs.RttysVersion }}-windows-amd64.tar.bz2
           draft: true
 
   docker:
@@ -70,8 +75,7 @@ jobs:
 
       - id: get-version
         uses: battila7/get-version-action@v2
-        with:
-          strip-suffix: "_ko"
+        # Removed with: strip-suffix: "_ko"
 
       - name: Download rttys binary
         uses: actions/download-artifact@v4
@@ -90,5 +94,5 @@ jobs:
         with:
           push: true
           tags: |
-            jkhkr/rttys:${{ steps.get-version.outputs.version-without-v }}
+            jkhkr/rttys:${{ needs.build.outputs.rttys_version }}
             jkhkr/rttys:latest
