@@ -23,6 +23,7 @@
 import useLanguage from './hooks/useLanguage'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import koKR from 'ant-design-vue/es/locale/ko_KR'
 import { computed } from 'vue'
 import { useAppStore } from './stores/modules/app'
 import { RouterView } from 'vue-router'
@@ -39,6 +40,7 @@ const { currentLang } = useLanguage()
 const localeMap = new Map([
     [Languages.ZH, zhCN],
     [Languages.EN, enUS],
+    [Languages.KO, koKR],
 ])
 
 // ant d的语言包

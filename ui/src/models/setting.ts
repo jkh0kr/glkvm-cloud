@@ -13,6 +13,7 @@ import { Languages, SelectOptions } from 'gl-web-main'
 export const languageLabelMap = new Map<Languages, string>([
     [Languages.ZH, '中文'],
     [Languages.EN, 'English'],
+    [Languages.KO, '한국어'],
 ])
 
 /** 语言选择options */

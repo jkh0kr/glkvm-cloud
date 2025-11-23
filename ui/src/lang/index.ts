@@ -9,6 +9,7 @@
 import { createI18n } from 'vue-i18n'
 import zh from './locales/zh.json' 
 import en from './locales/en.json'
+import ko from './locales/ko.json'
 import useLanguage from '@/hooks/useLanguage'
 import { Languages } from 'gl-web-main'
 
@@ -26,6 +27,7 @@ const i18n = createI18n({
 const initializeAllLanguage = () => {
     i18n.global.setLocaleMessage(Languages.ZH, zh)
     i18n.global.setLocaleMessage(Languages.EN, en)
+    i18n.global.setLocaleMessage(Languages.KO, ko)
     useLanguage().setLanguage()
 }
 

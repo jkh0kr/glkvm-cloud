@@ -18,8 +18,20 @@ export default function useLanguage () {
     const browserLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || ''
     // 判断是否为中文
     const isZhBrowser = browserLanguage.startsWith('zh') || browserLanguage.startsWith('ZH')
+    const isKoBrowser = browserLanguage.startsWith('ko') || browserLanguage.startsWith('KO')
 
-    const {getValue, setValue} = useLocalStorage(LocalStorageKeys.STORAGE_LANGUAGE_KEY, isZhBrowser ? Languages.ZH : Languages.EN)
+    const getDefaultLanguage = () => {
+      if (isZhBrowser) {
+        return Languages.ZH
+      }
+      if (isKoBrowser) {
+        // @ts-ignore
+        return Languages.KO
+      }
+      return Languages.EN
+    }
+
+    const {getValue, setValue} = useLocalStorage(LocalStorageKeys.STORAGE_LANGUAGE_KEY, getDefaultLanguage())
 
     const currentLang = computed(() => i18n.global.locale.value as Languages)
 
