@@ -93,6 +93,4 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           push: true
-          tags: |
-            jkhkr/rttys:${{ needs.build.outputs.rttys_version }}
-            jkhkr/rttys:latest
+          tags: jkhkr/rttys:${{ needs.build.outputs.rttys_version }},jkhkr/rttys:latest
